@@ -1,11 +1,28 @@
 <%- include('partials/header') %>
 
 <h1>Welcome to Aquarium World</h1>
+
 <p>Explore marine life, underwater habitats and conservation at Aquarium World.</p>
 
 <section>
   <h2>Opening Times</h2>
   <p><strong>Open every day, 9am–6pm</strong></p>
+</section>
+
+<section aria-labelledby="featured-zones">
+  <h2 id="featured-zones">Explore our Zones</h2>
+
+  <% zones.forEach(zone => { %>
+    <article>
+      <h3><%= zone.name %></h3>
+
+      <p><%= zone.short_description %></p>
+
+      <a href="/zones/<%= zone.slug %>">
+        Explore <%= zone.name %>
+      </a>
+    </article>
+  <% }) %>
 </section>
 
 <%- include('partials/footer') %>

@@ -1,4 +1,7 @@
 import express from "express";
+import zonesRouter from "./routes/zones.mjs";
+import { all } from "./database/db.mjs";
+import contactRouter from "./routes/contact.mjs";
 
 const app = express();
 
@@ -6,15 +9,29 @@ app.set("view engine", "ejs");
 app.set("views", "views");
 
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+
+app.use("/zones", zonesRouter);
+app.use("/contact", contactRouter);
 
 const PORT = 5000;
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
+app.get("/", async (req, res) => {
+  try {
+    const zones = await all(`
+      SELECT
+        name,
+        slug,
+        short_description
+      FROM zones
+      ORDER BY zone_id
+    `);
 
-app.get("/zones", (req, res) => {
-  res.render("zones");
+    res.render("home", { zones });
+  } catch (error) {
+    console.error("Error loading homepage:", error.message);
+    res.status(500).send("Unable to load the homepage.");
+  }
 });
 
 app.get("/activity", (req, res) => {
@@ -27,10 +44,6 @@ app.get("/events", (req, res) => {
 
 app.get("/faq", (req, res) => {
   res.render("faq");
-});
-
-app.get("/contact", (req, res) => {
-  res.render("contact");
 });
 
 app.use((req, res) => {

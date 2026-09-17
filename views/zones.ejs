@@ -1,6 +1,23 @@
 <%- include('partials/header') %>
 
 <h1>Zones</h1>
+
 <p>Explore the different themed areas of Aquarium World.</p>
+
+<section aria-labelledby="zones-heading">
+  <h2 id="zones-heading">Explore our aquarium</h2>
+
+  <% zones.forEach(zone => { %>
+    <article>
+      <h3><%= zone.name %></h3>
+
+      <p><%= zone.short_description %></p>
+
+      <a href="/zones/<%= zone.slug %>">
+        Explore <%= zone.name %>
+      </a>
+    </article>
+  <% }) %>
+</section>
 
 <%- include('partials/footer') %>

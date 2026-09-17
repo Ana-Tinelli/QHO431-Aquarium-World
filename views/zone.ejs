@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+
+<article>
+  <header>
+    <h1><%= zone.name %></h1>
+    <p><%= zone.short_description %></p>
+  </header>
+
+  <section aria-labelledby="about-zone">
+    <h2 id="about-zone">About this zone</h2>
+    <p><%= zone.description %></p>
+  </section>
+
+  <section aria-labelledby="conservation">
+    <h2 id="conservation">Conservation</h2>
+    <p><%= zone.conservation_message %></p>
+  </section>
+
+  <section aria-labelledby="exhibits-heading">
+    <h2 id="exhibits-heading">Exhibits and experiences</h2>
+
+    <% if (exhibits.length === 0) { %>
+      <p>No exhibits are currently available for this zone.</p>
+    <% } else { %>
+      <% exhibits.forEach(exhibit => { %>
+        <article>
+          <h3><%= exhibit.name %></h3>
+
+          <p>
+            <strong>Type:</strong>
+            <%= exhibit.exhibit_type %>
+          </p>
+
+          <p><%= exhibit.description %></p>
+        </article>
+      <% }) %>
+    <% } %>
+  </section>
+
+  <p>
+    <a href="/zones">Back to all zones</a>
+  </p>
+</article>
+
+<%- include('partials/footer') %>
