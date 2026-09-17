@@ -1,44 +1,62 @@
 <%- include('partials/header') %>
 
-<article>
-  <header>
+<article class="zone-detail">
+  <header class="zone-hero">
+    <p class="eyebrow">Aquarium Zone</p>
+
     <h1><%= zone.name %></h1>
-    <p><%= zone.short_description %></p>
+
+    <p class="zone-hero__intro">
+      <%= zone.short_description %>
+    </p>
   </header>
 
-  <section aria-labelledby="about-zone">
-    <h2 id="about-zone">About this zone</h2>
-    <p><%= zone.description %></p>
-  </section>
+  <div class="zone-information">
+    <section class="info-panel" aria-labelledby="about-zone">
+      <p class="eyebrow">Discover</p>
+      <h2 id="about-zone">About this zone</h2>
+      <p><%= zone.description %></p>
+    </section>
 
-  <section aria-labelledby="conservation">
-    <h2 id="conservation">Conservation</h2>
-    <p><%= zone.conservation_message %></p>
-  </section>
+    <section class="info-panel info-panel--conservation" aria-labelledby="conservation">
+      <p class="eyebrow">Protect</p>
+      <h2 id="conservation">Conservation</h2>
+      <p><%= zone.conservation_message %></p>
+    </section>
+  </div>
 
-  <section aria-labelledby="exhibits-heading">
-    <h2 id="exhibits-heading">Exhibits and experiences</h2>
+  <section class="content-section" aria-labelledby="exhibits-heading">
+    <div class="section-heading">
+      <p class="eyebrow">Inside the zone</p>
+      <h2 id="exhibits-heading">Exhibits and experiences</h2>
+    </div>
 
     <% if (exhibits.length === 0) { %>
       <p>No exhibits are currently available for this zone.</p>
     <% } else { %>
-      <% exhibits.forEach(exhibit => { %>
-        <article>
-          <h3><%= exhibit.name %></h3>
 
-          <p>
-            <strong>Type:</strong>
-            <%= exhibit.exhibit_type %>
-          </p>
+      <div class="exhibit-grid">
+        <% exhibits.forEach(exhibit => { %>
+          <article class="exhibit-card">
+            <p class="exhibit-card__type">
+              <%= exhibit.exhibit_type %>
+            </p>
 
-          <p><%= exhibit.description %></p>
-        </article>
-      <% }) %>
+            <h3><%= exhibit.name %></h3>
+
+            <p><%= exhibit.description %></p>
+          </article>
+        <% }) %>
+      </div>
+
     <% } %>
   </section>
 
-  <p>
-    <a href="/zones">Back to all zones</a>
+  <p class="back-link">
+    <a href="/zones">
+      <span aria-hidden="true">←</span>
+      Back to all zones
+    </a>
   </p>
 </article>
 

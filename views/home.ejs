@@ -1,28 +1,67 @@
 <%- include('partials/header') %>
 
-<h1>Welcome to Aquarium World</h1>
+<section class="hero" aria-labelledby="home-heading">
+  <div class="hero__content">
+    <p class="eyebrow">Explore the underwater world</p>
 
-<p>Explore marine life, underwater habitats and conservation at Aquarium World.</p>
+    <h1 id="home-heading">Welcome to Aquarium World</h1>
 
-<section>
-  <h2>Opening Times</h2>
-  <p><strong>Open every day, 9am–6pm</strong></p>
+    <p class="hero__intro">
+      Explore marine life, underwater habitats and conservation at Aquarium World.
+    </p>
+
+    <a class="button-link" href="/zones">Explore our Zones</a>
+  </div>
 </section>
 
-<section aria-labelledby="featured-zones">
-  <h2 id="featured-zones">Explore our Zones</h2>
+<section class="opening-card" aria-labelledby="opening-heading">
+  <div>
+    <p class="eyebrow">Plan your visit</p>
+    <h2 id="opening-heading">Opening Times</h2>
+  </div>
 
-  <% zones.forEach(zone => { %>
-    <article>
-      <h3><%= zone.name %></h3>
+  <p class="opening-card__time">
+    <strong>Open every day, 9am–6pm</strong>
+  </p>
+</section>
 
-      <p><%= zone.short_description %></p>
+<section class="content-section" aria-labelledby="featured-zones">
+  <div class="section-heading">
+    <p class="eyebrow">Start exploring</p>
+    <h2 id="featured-zones">Explore our Zones</h2>
+    <p>
+      Discover four environments inspired by remarkable aquatic habitats.
+    </p>
+  </div>
 
-      <a href="/zones/<%= zone.slug %>">
-        Explore <%= zone.name %>
-      </a>
-    </article>
-  <% }) %>
+  <div class="card-grid">
+    <% zones.forEach(zone => { %>
+      <article class="zone-card">
+        <div class="zone-card__content">
+          <h3><%= zone.name %></h3>
+
+          <p><%= zone.short_description %></p>
+
+          <a class="card-link" href="/zones/<%= zone.slug %>">
+            Explore <%= zone.name %>
+            <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+</section>
+
+<section class="conservation-banner" aria-labelledby="conservation-home">
+  <div>
+    <p class="eyebrow eyebrow--light">Our shared ocean</p>
+    <h2 id="conservation-home">Explore with conservation in mind</h2>
+  </div>
+
+  <p>
+    Every habitat has a story. Discover the wildlife, environments and
+    conservation challenges connected to life below the surface.
+  </p>
 </section>
 
 <%- include('partials/footer') %>

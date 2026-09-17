@@ -1,6 +1,118 @@
 <%- include('partials/header') %>
 
-<h1>Activity</h1>
-<p>An interactive Aquarium World activity will be added here in a later development stage.</p>
+<header class="page-intro">
+  <p class="eyebrow">Interactive experience</p>
+
+  <h1>Discover the Deep</h1>
+
+  <p class="page-intro__text">
+    Explore the darkness of Into the Deep and discover five creatures adapted to life far below the surface.
+  </p>
+</header>
+
+<section class="activity-intro" aria-labelledby="activity-instructions">
+  <div>
+    <p class="eyebrow">How to play</p>
+    <h2 id="activity-instructions">Find all five deep-sea creatures</h2>
+  </div>
+
+  <p>
+    Select each discovery point to reveal a creature and learn a short fact.
+    You can use a mouse, touchscreen or keyboard.
+  </p>
+</section>
+
+<section class="deep-discovery" aria-labelledby="deep-discovery-heading">
+
+  <div class="activity-status">
+    <div>
+      <p class="eyebrow eyebrow--light">Your progress</p>
+      <h2 id="deep-discovery-heading">Explore the deep</h2>
+    </div>
+
+    <p id="activity-progress" class="activity-progress" aria-live="polite">
+      0 of 5 creatures discovered
+    </p>
+  </div>
+
+  <div class="deep-scene">
+
+    <button
+      class="creature-spot creature-spot--1"
+      type="button"
+      data-creature="anglerfish"
+      aria-label="Discover hidden creature 1"
+    >
+      <span aria-hidden="true">?</span>
+    </button>
+
+    <button
+      class="creature-spot creature-spot--2"
+      type="button"
+      data-creature="giant-isopod"
+      aria-label="Discover hidden creature 2"
+    >
+      <span aria-hidden="true">?</span>
+    </button>
+
+    <button
+      class="creature-spot creature-spot--3"
+      type="button"
+      data-creature="vampire-squid"
+      aria-label="Discover hidden creature 3"
+    >
+      <span aria-hidden="true">?</span>
+    </button>
+
+    <button
+      class="creature-spot creature-spot--4"
+      type="button"
+      data-creature="barreleye"
+      aria-label="Discover hidden creature 4"
+    >
+      <span aria-hidden="true">?</span>
+    </button>
+
+    <button
+      class="creature-spot creature-spot--5"
+      type="button"
+      data-creature="gulper-eel"
+      aria-label="Discover hidden creature 5"
+    >
+      <span aria-hidden="true">?</span>
+    </button>
+
+  </div>
+
+  <div
+    id="activity-feedback"
+    class="activity-feedback"
+    aria-live="polite"
+    aria-atomic="true"
+  >
+    <p class="activity-feedback__prompt">
+      Choose a discovery point to begin.
+    </p>
+  </div>
+
+  <div
+    id="activity-complete"
+    class="activity-complete"
+    role="status"
+    hidden
+  >
+    <p class="eyebrow">Exploration complete</p>
+
+    <h2>You discovered all five creatures</h2>
+
+    <p>
+      Life in the deep ocean survives through remarkable adaptations to darkness,
+      pressure and limited food.
+    </p>
+  </div>
+
+</section>
+
+<script src="/js/activity.js"></script>
 
 <%- include('partials/footer') %>

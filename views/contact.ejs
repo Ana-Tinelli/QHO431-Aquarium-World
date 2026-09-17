@@ -1,78 +1,113 @@
 <%- include('partials/header') %>
 
-<h1>Contact</h1>
+<header class="page-intro">
+  <p class="eyebrow">Get in touch</p>
 
-<p>
-  Have a question about Aquarium World? Send us a message using the form below.
-</p>
+  <h1>Contact</h1>
 
-<% if (submitted) { %>
-  <p role="status">
-    Thank you. Your message has been sent successfully.
+  <p class="page-intro__text">
+    Have a question about Aquarium World? Send us a message using the form below.
   </p>
-<% } %>
+</header>
 
-<% if (errors.length > 0) { %>
-  <div role="alert">
-    <p>Please correct the following:</p>
+<div class="contact-layout">
 
-    <ul>
-      <% errors.forEach(error => { %>
-        <li><%= error %></li>
-      <% }) %>
-    </ul>
-  </div>
-<% } %>
+  <section class="contact-panel" aria-labelledby="contact-form-heading">
 
-<form id="contact-form" action="/contact" method="POST" novalidate>
-  <div>
-    <label for="name">Name</label>
+    <h2 id="contact-form-heading">Send us a message</h2>
 
-    <input
-      type="text"
-      id="name"
-      name="name"
-      value="<%= formData.name %>"
-      minlength="2"
-      maxlength="100"
-      autocomplete="name"
-      required
-    >
+    <% if (submitted) { %>
+      <div class="form-message form-message--success" role="status">
+        <p>Thank you. Your message has been sent successfully.</p>
+      </div>
+    <% } %>
 
-    <p id="name-error"></p>
-  </div>
+    <% if (errors.length > 0) { %>
+      <div class="form-message form-message--error" role="alert">
+        <p><strong>Please correct the following:</strong></p>
 
-  <div>
-    <label for="email">Email</label>
+        <ul>
+          <% errors.forEach(error => { %>
+            <li><%= error %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
 
-    <input
-      type="email"
-      id="email"
-      name="email"
-      value="<%= formData.email %>"
-      maxlength="254"
-      autocomplete="email"
-      required
-    >
+    <form id="contact-form" action="/contact" method="POST" novalidate>
 
-    <p id="email-error"></p>
-  </div>
+      <div class="form-field">
+        <label for="name">Name</label>
 
-  <div>
-    <label for="message">Message</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= formData.name %>"
+          minlength="2"
+          maxlength="100"
+          autocomplete="name"
+          required
+        >
 
-    <textarea
-      id="message"
-      name="message"
-      minlength="10"
-      maxlength="1000"
-      required
-    ><%= formData.message %></textarea>
+        <p id="name-error" class="field-error"></p>
+      </div>
 
-    <p id="message-error"></p>
-  </div>
+      <div class="form-field">
+        <label for="email">Email</label>
 
-  <button type="submit">Send message</button>
-</form>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value="<%= formData.email %>"
+          maxlength="254"
+          autocomplete="email"
+          required
+        >
+
+        <p id="email-error" class="field-error"></p>
+      </div>
+
+      <div class="form-field">
+        <label for="message">Message</label>
+
+        <textarea
+          id="message"
+          name="message"
+          minlength="10"
+          maxlength="1000"
+          required
+        ><%= formData.message %></textarea>
+
+        <p id="message-error" class="field-error"></p>
+      </div>
+
+      <button type="submit">Send message</button>
+
+    </form>
+
+  </section>
+
+  <aside class="contact-information" aria-labelledby="contact-info-heading">
+    <p class="eyebrow">Before you contact us</p>
+
+    <h2 id="contact-info-heading">Visitor information</h2>
+
+    <p>
+      Aquarium World is open every day from 9am–6pm.
+    </p>
+
+    <p>
+      You may also find the answer you need in our frequently asked questions.
+    </p>
+
+    <a class="card-link" href="/faq">
+      Visit the FAQ
+      <span aria-hidden="true">→</span>
+    </a>
+  </aside>
+
+</div>
 
 <%- include('partials/footer') %>
