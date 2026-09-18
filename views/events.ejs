@@ -10,14 +10,84 @@
   </p>
 </header>
 
-<section class="placeholder-panel" aria-labelledby="events-coming">
-  <p class="eyebrow">Coming soon</p>
-  <h2 id="events-coming">Explore Aquarium World events</h2>
+<section class="events-section" aria-labelledby="events-filters-title">
+  <h2 id="events-filters-title">Find an event</h2>
 
-  <p>
-    Our events experience is currently being prepared and will include
-    activities from across Aquarium World.
+  <form id="events-filters" class="events-filter-form">
+    <div>
+      <label for="event-year">Year</label>
+      <select id="event-year" name="year">
+        <% years.forEach((year) => { %>
+          <option
+            value="<%= year.year %>"
+            <%= year.year === selectedYear ? "selected" : "" %>
+          >
+            <%= year.year %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div>
+      <label for="event-category">Category</label>
+      <select id="event-category" name="category">
+        <option value="">All categories</option>
+
+        <% categories.forEach((category) => { %>
+          <option
+            value="<%= category.slug %>"
+            <%= category.slug === selectedCategory ? "selected" : "" %>
+          >
+            <%= category.name %>
+          </option>
+        <% }) %>
+      </select>
+    </div>
+  </form>
+
+  <p id="events-status" class="events-status" aria-live="polite">
+    <% if (events.length === 0) { %>
+      No events found for the selected filters.
+    <% } else { %>
+      <%= events.length %> event<%= events.length === 1 ? "" : "s" %> found.
+    <% } %>
   </p>
+
+  <div id="events-results" class="event-grid">
+    <% events.forEach((event) => { %>
+      <article class="event-card">
+        <% if (event.imagePath) { %>
+          <img
+            class="event-card__image"
+            src="<%= event.imagePath %>"
+            alt="<%= event.name %>"
+          >
+        <% } %>
+
+        <div class="event-card__content">
+          <p class="event-card__category"><%= event.categoryName %></p>
+
+          <h3>
+            <a href="/events/<%= event.slug %>"><%= event.name %></a>
+          </h3>
+
+          <p class="event-card__date">
+            <time datetime="<%= event.eventDate %>">
+              <%= event.dateLabel %>
+            </time>
+          </p>
+
+          <p><%= event.shortDescription %></p>
+
+          <a class="card-link" href="/events/<%= event.slug %>">
+            View event details
+          </a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
 </section>
+
+<script src="/js/events.js" defer></script>
 
 <%- include('partials/footer') %>

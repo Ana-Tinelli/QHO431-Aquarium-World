@@ -379,6 +379,18 @@ async function setup() {
       },
       {
         categorySlug: "family-activities",
+        name: "Coastal Creatures Family Day",
+        slug: "coastal-creatures-family-day-2024",
+        shortDescription:
+          "A family activity day exploring rockpools, coastal wildlife and tidal habitats.",
+        description:
+          "Coastal Creatures Family Day invited families to discover how animals and plants survive around rocky shores, with practical activities focused on tides, habitats and coastal conservation.",
+        eventDate: "2024-08-10",
+        imagePath: null,
+        featured: 0
+      },
+      {
+        categorySlug: "family-activities",
         name: "Junior Reef Explorers",
         slug: "junior-reef-explorers-2025",
         shortDescription:

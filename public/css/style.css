@@ -1284,3 +1284,120 @@ button:hover {
     height: 3rem;
   }
 }
+
+/* ---------- Events ---------- */
+
+.events-section {
+  max-width: var(--content-width);
+}
+
+.events-filter-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 16rem));
+  gap: var(--space-4);
+
+  max-width: none;
+  margin-bottom: var(--space-3);
+}
+
+.events-filter-form > div {
+  margin-bottom: 0;
+}
+
+.events-filter-form select {
+  width: 100%;
+  padding: 0.8rem 0.9rem;
+
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-small);
+
+  background: var(--colour-surface);
+  color: var(--colour-text);
+}
+
+.events-status {
+  min-height: 1.75rem;
+  margin-bottom: var(--space-4);
+
+  color: var(--colour-text-muted);
+  font-weight: 700;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--space-4);
+}
+
+.event-card {
+  overflow: hidden;
+
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-medium);
+
+  background: var(--colour-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.event-card__image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.event-card__content {
+  padding: var(--space-4);
+}
+
+.event-card__category {
+  margin-bottom: var(--space-1);
+
+  color: var(--colour-ocean-700);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.event-card__date,
+.event-detail__date {
+  color: var(--colour-text-muted);
+  font-weight: 700;
+}
+
+.event-card__content > :last-child {
+  margin-bottom: 0;
+}
+
+.event-detail {
+  max-width: 48rem;
+}
+
+.event-detail__status {
+  display: inline-block;
+
+  padding: 0.45rem 0.75rem;
+  margin-bottom: var(--space-4);
+
+  border-radius: var(--radius-small);
+
+  background: #e4f6f3;
+  color: var(--colour-ocean-950);
+
+  font-weight: 800;
+}
+
+.event-detail__image {
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-medium);
+}
+
+.event-detail__description {
+  font-size: 1.1rem;
+}
+
+@media (max-width: 30rem) {
+  .events-filter-form {
+    grid-template-columns: 1fr;
+  }
+}

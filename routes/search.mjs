@@ -46,7 +46,7 @@ router.get("/", async (req, res) => {
           name,
           'Event' AS type,
           short_description AS description,
-          '/events' AS url
+          '/events/' || slug AS url
         FROM events
         WHERE name LIKE ?
            OR short_description LIKE ?

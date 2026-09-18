@@ -3,6 +3,7 @@ import zonesRouter from "./routes/zones.mjs";
 import { all } from "./database/db.mjs";
 import contactRouter from "./routes/contact.mjs";
 import searchRouter from "./routes/search.mjs";
+import eventsRouter from "./routes/events.mjs";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/zones", zonesRouter);
 app.use("/contact", contactRouter);
 app.use("/api/search", searchRouter);
+app.use("/", eventsRouter);
 
 const PORT = 5000;
 
@@ -40,10 +42,6 @@ app.get("/activity", (req, res) => {
   res.render("activity");
 });
 
-app.get("/events", (req, res) => {
-  res.render("events");
-});
-
 app.get("/faq", (req, res) => {
   res.render("faq");
 });
@@ -51,6 +49,7 @@ app.get("/faq", (req, res) => {
 app.use((req, res) => {
   res.status(404).render("404");
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
