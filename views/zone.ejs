@@ -37,7 +37,10 @@
 
       <div class="exhibit-grid">
         <% exhibits.forEach(exhibit => { %>
-          <article class="exhibit-card">
+          <article
+            class="exhibit-card"
+            id="exhibit-<%= exhibit.exhibit_id %>"
+         >
             <p class="exhibit-card__type">
               <%= exhibit.exhibit_type %>
             </p>

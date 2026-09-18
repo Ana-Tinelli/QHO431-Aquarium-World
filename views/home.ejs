@@ -25,6 +25,39 @@
   </p>
 </section>
 
+<section class="search-section" aria-labelledby="search-heading">
+  <div class="section-heading">
+    <p class="eyebrow">Find something specific</p>
+    <h2 id="search-heading">Search Aquarium World</h2>
+    <p>
+      Search our zones, exhibits and events.
+    </p>
+  </div>
+
+  <div class="search-box">
+    <label for="site-search">Search</label>
+
+    <input
+      type="search"
+      id="site-search"
+      name="q"
+      placeholder="Try coral, rainforest or workshop"
+      autocomplete="off"
+    >
+
+    <div
+      id="search-status"
+      class="search-status"
+      aria-live="polite"
+    ></div>
+
+    <div
+      id="search-results"
+      class="search-results"
+    ></div>
+  </div>
+</section>
+
 <section class="content-section" aria-labelledby="featured-zones">
   <div class="section-heading">
     <p class="eyebrow">Start exploring</p>
@@ -63,5 +96,7 @@
     conservation challenges connected to life below the surface.
   </p>
 </section>
+
+<script src="/js/search.js"></script>
 
 <%- include('partials/footer') %>

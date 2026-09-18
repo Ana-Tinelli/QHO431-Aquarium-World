@@ -2,6 +2,7 @@ import express from "express";
 import zonesRouter from "./routes/zones.mjs";
 import { all } from "./database/db.mjs";
 import contactRouter from "./routes/contact.mjs";
+import searchRouter from "./routes/search.mjs";
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/zones", zonesRouter);
 app.use("/contact", contactRouter);
+app.use("/api/search", searchRouter);
 
 const PORT = 5000;
 
