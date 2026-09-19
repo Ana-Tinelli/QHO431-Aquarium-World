@@ -115,6 +115,7 @@ router.get("/events", async (req, res) => {
     );
 
     res.render("events", {
+      pageTitle: "Events",
       years,
       categories,
       events,
@@ -169,12 +170,15 @@ router.get("/events/:slug", async (req, res) => {
     );
 
     if (!event) {
-      return res.status(404).render("404");
+      return res.status(404).render("404", {
+  pageTitle: "Page not found"
+});
     }
 
     const isPast = event.eventDate < getTodayDateString();
 
     res.render("event", {
+      pageTitle: event.name,
       event: {
         ...event,
         dateLabel: formatEventDate(event.eventDate)

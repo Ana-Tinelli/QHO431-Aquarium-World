@@ -457,18 +457,57 @@ button:hover {
     );
 
   background:
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(69, 214, 200, 0.22),
-      transparent 28rem
-    ),
-    linear-gradient(
-      135deg,
-      var(--colour-ocean-950),
-      var(--colour-ocean-800)
-    );
+  linear-gradient(
+    90deg,
+    rgba(4, 24, 38, 0.92) 0%,
+    rgba(4, 24, 38, 0.72) 42%,
+    rgba(4, 24, 38, 0.28) 72%,
+    rgba(4, 24, 38, 0.12) 100%
+  ),
+  url("/images/hero-aquarium.webp");
+
+background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
 
   color: var(--colour-surface);
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -15%;
+
+  background:
+    linear-gradient(
+      115deg,
+      transparent 30%,
+      rgba(125, 228, 218, 0.08) 42%,
+      transparent 54%
+    ),
+    linear-gradient(
+      70deg,
+      transparent 38%,
+      rgba(255, 255, 255, 0.05) 48%,
+      transparent 58%
+    );
+
+  background-size: 160% 160%;
+
+  animation: water-light 12s ease-in-out infinite alternate;
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes water-light {
+  from {
+    transform: translate3d(-3%, -2%, 0) scale(1);
+  }
+
+  to {
+    transform: translate3d(3%, 2%, 0) scale(1.05);
+  }
 }
 
 .hero::after {
@@ -498,6 +537,10 @@ button:hover {
 
 .hero h1 {
   color: var(--colour-surface);
+}
+
+.hero .eyebrow {
+  color: var(--colour-aqua-300);
 }
 
 .hero__intro {
@@ -569,6 +612,7 @@ button:hover {
   min-height: 15rem;
 
   display: flex;
+  flex-direction: column;
 
   overflow: hidden;
 
@@ -584,6 +628,7 @@ button:hover {
     var(--colour-surface);
 
   box-shadow: var(--shadow-soft);
+
 }
 
 .zone-card::before {
@@ -602,6 +647,12 @@ button:hover {
       var(--colour-aqua-400),
       var(--colour-ocean-700)
     );
+}
+
+.zone-card__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
 }
 
 .zone-card__content {
@@ -661,12 +712,24 @@ button:hover {
 }
 
 .zone-hero {
-  max-width: 52rem;
+  max-width: none;
 
   margin-bottom: var(--space-6);
   padding-bottom: var(--space-5);
 
   border-bottom: 1px solid var(--colour-border);
+}
+
+.zone-hero__image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+
+  margin-top: var(--space-4);
+
+  border-radius: var(--radius-medium);
+
+  box-shadow: var(--shadow-soft);
 }
 
 .zone-information {
@@ -1018,21 +1081,16 @@ button:hover {
   border-radius: var(--radius-medium);
 
   background:
-    radial-gradient(
-      circle at 28% 32%,
-      rgba(69, 214, 200, 0.12),
-      transparent 7rem
-    ),
-    radial-gradient(
-      circle at 70% 68%,
-      rgba(69, 214, 200, 0.08),
-      transparent 9rem
-    ),
     linear-gradient(
       180deg,
-      #0a3048,
-      #041723
-    );
+      rgba(3, 20, 33, 0.28),
+      rgba(3, 20, 33, 0.58)
+    ),
+    url("/images/deep-sea-trench.webp");
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .deep-scene::before,
@@ -1083,11 +1141,18 @@ button:hover {
   font-weight: 900;
 
   box-shadow:
-    0 0 0 0.35rem rgba(69, 214, 200, 0.08),
-    0 0 1.5rem rgba(69, 214, 200, 0.28);
+    0 0 0 0.35rem rgba(69, 214, 200, 0.12),
+    0 0 1.8rem rgba(69, 214, 200, 0.42);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
-.creature-spot:hover {
+.creature-spot:hover,
+.creature-spot:focus-visible {
+  transform: scale(1.08);
   background: var(--colour-ocean-800);
 }
 
@@ -1135,6 +1200,31 @@ button:hover {
   background: rgba(255, 255, 255, 0.07);
 }
 
+.activity-feedback__content {
+  display: grid;
+  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
+  gap: var(--space-4);
+
+  align-items: center;
+}
+
+.activity-feedback__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+
+  object-fit: cover;
+
+  border-radius: var(--radius-small);
+}
+
+.activity-feedback__information {
+  min-width: 0;
+}
+
+.activity-feedback__information > :last-child {
+  margin-bottom: 0;
+}
+
 .activity-feedback h3 {
   margin-bottom: var(--space-2);
 }
@@ -1161,6 +1251,10 @@ button:hover {
   border-radius: var(--radius-small);
 
   background: rgba(255, 128, 108, 0.12);
+}
+
+.activity-complete .eyebrow {
+  color: var(--colour-aqua-300);
 }
 
 .activity-complete > :last-child {
@@ -1250,6 +1344,10 @@ button:hover {
   .deep-scene {
     min-height: 27rem;
   }
+
+  .activity-feedback__content {
+  grid-template-columns: 1fr;
+}
 }
 
 @media (max-width: 30rem) {
@@ -1282,6 +1380,21 @@ button:hover {
   .creature-spot {
     width: 3rem;
     height: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero::before {
+    animation: none;
+  }
+
+  .creature-spot {
+    transition: none;
+  }
+
+  .creature-spot:hover,
+  .creature-spot:focus-visible {
+    transform: none;
   }
 }
 
@@ -1370,7 +1483,7 @@ button:hover {
 }
 
 .event-detail {
-  max-width: 48rem;
+  max-width: 64rem;
 }
 
 .event-detail__status {

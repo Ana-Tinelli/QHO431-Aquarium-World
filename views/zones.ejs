@@ -21,7 +21,13 @@
 
   <div class="card-grid">
     <% zones.forEach(zone => { %>
-      <article class="zone-card">
+     <article class="zone-card">
+      <img
+  class="zone-card__image"
+  src="<%= zone.image_path %>"
+  alt="<%= zone.name %> aquarium zone"
+/>
+      
         <div class="zone-card__content">
           <h3><%= zone.name %></h3>
 

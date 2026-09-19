@@ -16,6 +16,10 @@ if (contactForm) {
     emailError.textContent = "";
     messageError.textContent = "";
 
+    name.removeAttribute("aria-invalid");
+    email.removeAttribute("aria-invalid");
+    message.removeAttribute("aria-invalid");
+
     const nameValue = name.value.trim();
     const emailValue = email.value.trim();
     const messageValue = message.value.trim();
@@ -23,6 +27,7 @@ if (contactForm) {
     if (nameValue.length < 2 || nameValue.length > 100) {
       nameError.textContent =
         "Please enter a name between 2 and 100 characters.";
+      name.setAttribute("aria-invalid", "true");
       isValid = false;
     }
 
@@ -34,6 +39,7 @@ if (contactForm) {
     ) {
       emailError.textContent =
         "Please enter a valid email address.";
+      email.setAttribute("aria-invalid", "true");
       isValid = false;
     }
 
@@ -43,6 +49,7 @@ if (contactForm) {
     ) {
       messageError.textContent =
         "Please enter a message between 10 and 1000 characters.";
+      message.setAttribute("aria-invalid", "true");
       isValid = false;
     }
 

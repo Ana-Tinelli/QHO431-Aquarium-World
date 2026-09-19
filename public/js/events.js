@@ -16,6 +16,15 @@ function createEventCard(event) {
   const article = document.createElement("article");
   article.classList.add("event-card");
 
+  if (event.imagePath) {
+  const image = document.createElement("img");
+  image.classList.add("event-card__image");
+  image.src = event.imagePath;
+  image.alt = event.name;
+
+  article.append(image);
+}
+
   const content = document.createElement("div");
   content.classList.add("event-card__content");
 
@@ -68,7 +77,11 @@ function displayEvents(events) {
   });
 }
 
+let latestEventsRequest = 0;
+
 async function loadFilteredEvents() {
+  const requestId = ++latestEventsRequest;
+
   const parameters = new URLSearchParams({
     year: yearSelect.value
   });
@@ -81,13 +94,19 @@ async function loadFilteredEvents() {
   clearEventResults();
 
   try {
-    const response = await fetch(`/api/events?${parameters.toString()}`);
+    const response = await fetch(
+      `/api/events?${parameters.toString()}`
+    );
 
     if (!response.ok) {
       throw new Error("Events request failed.");
     }
 
     const data = await response.json();
+
+    if (requestId !== latestEventsRequest) {
+      return;
+    }
 
     displayEvents(data.events);
 
@@ -97,8 +116,13 @@ async function loadFilteredEvents() {
       `/events?${parameters.toString()}`
     );
   } catch (error) {
+    if (requestId !== latestEventsRequest) {
+      return;
+    }
+
     console.error("Events request error:", error);
     clearEventResults();
+
     showEventsStatus(
       "Sorry, events could not be loaded. Please try again."
     );

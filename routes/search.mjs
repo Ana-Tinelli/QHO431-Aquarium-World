@@ -4,7 +4,8 @@ import { all } from "../database/db.mjs";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-  const query = (req.query.q || "").trim();
+  const query =
+  typeof req.query.q === "string" ? req.query.q.trim() : "";
 
   if (!query) {
     return res.json([]);

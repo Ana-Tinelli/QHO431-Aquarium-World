@@ -9,46 +9,88 @@
     <p class="zone-hero__intro">
       <%= zone.short_description %>
     </p>
+
+    <img
+      class="zone-hero__image"
+      src="<%= zone.image_path %>"
+      alt="<%= zone.name %> aquarium zone"
+    />
   </header>
 
   <div class="zone-information">
-    <section class="info-panel" aria-labelledby="about-zone">
+    <section
+      class="info-panel"
+      aria-labelledby="about-zone"
+    >
       <p class="eyebrow">Discover</p>
-      <h2 id="about-zone">About this zone</h2>
-      <p><%= zone.description %></p>
+
+      <h2 id="about-zone">
+        About this zone
+      </h2>
+
+      <p>
+        <%= zone.description %>
+      </p>
     </section>
 
-    <section class="info-panel info-panel--conservation" aria-labelledby="conservation">
+    <section
+      class="info-panel info-panel--conservation"
+      aria-labelledby="conservation"
+    >
       <p class="eyebrow">Protect</p>
-      <h2 id="conservation">Conservation</h2>
-      <p><%= zone.conservation_message %></p>
+
+      <h2 id="conservation">
+        Conservation
+      </h2>
+
+      <p>
+        <%= zone.conservation_message %>
+      </p>
     </section>
   </div>
 
-  <section class="content-section" aria-labelledby="exhibits-heading">
+  <section
+    class="content-section"
+    aria-labelledby="exhibits-heading"
+  >
     <div class="section-heading">
-      <p class="eyebrow">Inside the zone</p>
-      <h2 id="exhibits-heading">Exhibits and experiences</h2>
+      <p class="eyebrow">
+        Inside the zone
+      </p>
+
+      <h2 id="exhibits-heading">
+        Exhibits and experiences
+      </h2>
     </div>
 
     <% if (exhibits.length === 0) { %>
-      <p>No exhibits are currently available for this zone.</p>
+
+      <p>
+        No exhibits are currently available for this zone.
+      </p>
+
     <% } else { %>
 
       <div class="exhibit-grid">
         <% exhibits.forEach(exhibit => { %>
+
           <article
             class="exhibit-card"
             id="exhibit-<%= exhibit.exhibit_id %>"
-         >
+          >
             <p class="exhibit-card__type">
               <%= exhibit.exhibit_type %>
             </p>
 
-            <h3><%= exhibit.name %></h3>
+            <h3>
+              <%= exhibit.name %>
+            </h3>
 
-            <p><%= exhibit.description %></p>
+            <p>
+              <%= exhibit.description %>
+            </p>
           </article>
+
         <% }) %>
       </div>
 

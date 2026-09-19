@@ -25,6 +25,7 @@ function validateContactForm(name, email, message) {
 
 router.get("/", (req, res) => {
   res.render("contact", {
+    pageTitle: "Contact",
     errors: [],
     submitted: false,
     formData: {
@@ -37,10 +38,11 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
   const formData = {
-    name: req.body.name?.trim() || "",
-    email: req.body.email?.trim() || "",
-    message: req.body.message?.trim() || ""
-  };
+  name: typeof req.body.name === "string" ? req.body.name.trim() : "",
+  email: typeof req.body.email === "string" ? req.body.email.trim() : "",
+  message:
+    typeof req.body.message === "string" ? req.body.message.trim() : ""
+};
 
   const errors = validateContactForm(
     formData.name,
@@ -50,6 +52,7 @@ router.post("/", async (req, res) => {
 
   if (errors.length > 0) {
     return res.status(400).render("contact", {
+      pageTitle: "Contact",
       errors,
       submitted: false,
       formData
@@ -74,6 +77,7 @@ router.post("/", async (req, res) => {
     );
 
     res.render("contact", {
+      pageTitle: "Contact",
       errors: [],
       submitted: true,
       formData: {
@@ -86,6 +90,7 @@ router.post("/", async (req, res) => {
     console.error("Error saving contact message:", error.message);
 
     res.status(500).render("contact", {
+      pageTitle: "Contact",
       errors: [
         "Your message could not be sent. Please try again."
       ],

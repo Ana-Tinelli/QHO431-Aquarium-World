@@ -16,7 +16,10 @@ router.get("/", async (req, res) => {
       ORDER BY zone_id
     `);
 
-    res.render("zones", { zones });
+    res.render("zones", {
+  pageTitle: "Zones",
+  zones
+});
   } catch (error) {
     console.error("Error loading zones:", error.message);
     res.status(500).send("Unable to load zones.");
@@ -42,7 +45,9 @@ router.get("/:slug", async (req, res) => {
     );
 
     if (!zone) {
-      return res.status(404).render("404");
+      return res.status(404).render("404", {
+  pageTitle: "Page not found"
+});
     }
 
     const exhibits = await all(
@@ -61,7 +66,11 @@ router.get("/:slug", async (req, res) => {
       [zone.zone_id]
     );
 
-    res.render("zone", { zone, exhibits });
+    res.render("zone", {
+  pageTitle: zone.name,
+  zone,
+  exhibits
+});
   } catch (error) {
     console.error("Error loading zone:", error.message);
     res.status(500).send("Unable to load this zone.");

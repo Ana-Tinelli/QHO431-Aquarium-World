@@ -31,7 +31,10 @@ app.get("/", async (req, res) => {
       ORDER BY zone_id
     `);
 
-    res.render("home", { zones });
+    res.render("home", {
+      pageTitle: "Home",
+      zones
+    });
   } catch (error) {
     console.error("Error loading homepage:", error.message);
     res.status(500).send("Unable to load the homepage.");
@@ -39,17 +42,22 @@ app.get("/", async (req, res) => {
 });
 
 app.get("/activity", (req, res) => {
-  res.render("activity");
+  res.render("activity", {
+    pageTitle: "Activity"
+  });
 });
 
 app.get("/faq", (req, res) => {
-  res.render("faq");
+  res.render("faq", {
+    pageTitle: "FAQ"
+  });
 });
 
 app.use((req, res) => {
-  res.status(404).render("404");
+  res.status(404).render("404", {
+    pageTitle: "Page not found"
+  });
 });
-
 
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
