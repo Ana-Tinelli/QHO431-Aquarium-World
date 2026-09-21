@@ -10,7 +10,7 @@
     </time>
   </p>
 
-  <p class="event-detail__status">
+  <p class="event-detail__status<%= isPast ? " event-detail__status--past" : "" %>">
     <% if (isPast) { %>
       This event has already taken place.
     <% } else { %>

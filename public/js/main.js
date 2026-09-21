@@ -1,3 +1,17 @@
+// Mark the current section in the main navigation for assistive technology.
+// aria-current="page" = this exact page, "true" = a page inside this section.
+const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+
+document.querySelectorAll(".site-nav a").forEach((link) => {
+  const linkPath = new URL(link.href).pathname.replace(/\/+$/, "") || "/";
+
+  if (linkPath === currentPath) {
+    link.setAttribute("aria-current", "page");
+  } else if (linkPath !== "/" && currentPath.startsWith(linkPath + "/")) {
+    link.setAttribute("aria-current", "true");
+  }
+});
+
 const contactForm = document.getElementById("contact-form");
 
 if (contactForm) {
@@ -55,6 +69,11 @@ if (contactForm) {
 
     if (!isValid) {
       event.preventDefault();
+
+      // Move focus to the first field with an error so keyboard and
+      // screen-reader users land on the problem (its message is linked
+      // to the field through aria-describedby).
+      contactForm.querySelector('[aria-invalid="true"]').focus();
     }
   });
 }

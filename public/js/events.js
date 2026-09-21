@@ -20,7 +20,8 @@ function createEventCard(event) {
   const image = document.createElement("img");
   image.classList.add("event-card__image");
   image.src = event.imagePath;
-  image.alt = event.name;
+  image.alt = "";
+  image.loading = "lazy";
 
   article.append(image);
 }

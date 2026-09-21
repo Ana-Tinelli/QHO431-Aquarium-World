@@ -41,7 +41,7 @@
       type="search"
       id="site-search"
       name="q"
-      placeholder="Try coral, rainforest or workshop"
+      placeholder="Try coral or workshop"
       autocomplete="off"
     >
 
@@ -70,6 +70,13 @@
   <div class="card-grid">
     <% zones.forEach(zone => { %>
       <article class="zone-card">
+        <img
+          class="zone-card__image"
+          src="<%= zone.image_path %>"
+          alt=""
+          loading="lazy"
+        >
+
         <div class="zone-card__content">
           <h3><%= zone.name %></h3>
 

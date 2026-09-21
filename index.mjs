@@ -26,7 +26,8 @@ app.get("/", async (req, res) => {
       SELECT
         name,
         slug,
-        short_description
+        short_description,
+        image_path
       FROM zones
       ORDER BY zone_id
     `);

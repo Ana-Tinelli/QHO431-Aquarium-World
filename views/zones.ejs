@@ -23,10 +23,11 @@
     <% zones.forEach(zone => { %>
      <article class="zone-card">
       <img
-  class="zone-card__image"
-  src="<%= zone.image_path %>"
-  alt="<%= zone.name %> aquarium zone"
-/>
+        class="zone-card__image"
+        src="<%= zone.image_path %>"
+        alt=""
+        loading="lazy"
+      >
       
         <div class="zone-card__content">
           <h3><%= zone.name %></h3>

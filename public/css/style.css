@@ -1,9 +1,32 @@
-/* =========================================
+/* =========================================================
    Aquarium World
-   Main stylesheet
-   ========================================= */
+   Main stylesheet (single shared stylesheet for every page)
 
-/* ---------- Base / Design Tokens ---------- */
+   Contents
+   1.  Design tokens
+   2.  Base
+   3.  Accessibility helpers
+   4.  Page layout (full-bleed grid)
+   5.  Header, opening-hours bar and navigation
+   6.  Typography
+   7.  Buttons and forms
+   8.  Shared components
+   9.  Hero and opening times
+   10. Site search
+   11. Zone cards
+   12. Conservation banner
+   13. Zone detail and exhibits
+   14. FAQ
+   15. Contact
+   16. Events
+   17. Activity
+   18. 404 page
+   19. Footer
+   20. Responsive rules
+   21. Reduced motion
+   ========================================================= */
+
+/* ---------- 1. Design tokens ---------- */
 
 :root {
   --colour-ocean-950: #061a2b;
@@ -13,22 +36,31 @@
 
   --colour-aqua-400: #45d6c8;
   --colour-aqua-300: #7de4da;
+  --colour-aqua-100: #e1f7f5;
 
   --colour-coral-400: #ff806c;
 
   --colour-surface: #ffffff;
-  --colour-surface-soft: #f7fcfd;
+  --colour-surface-soft: #f4fafb;
   --colour-border: #c9dce2;
 
   --colour-text: #102a3a;
   --colour-text-muted: #48616f;
 
-  --shadow-soft: 0 8px 24px rgba(6, 26, 43, 0.08);
+  /* Focus rings: dark on light surfaces, light on dark surfaces.
+     Both give well over 3:1 contrast against their background. */
+  --focus-ring: var(--colour-ocean-800);
+  --focus-ring-on-dark: var(--colour-aqua-300);
+
+  --shadow-soft: 0 6px 20px rgba(6, 26, 43, 0.08);
+  --shadow-lift: 0 14px 34px rgba(6, 26, 43, 0.16);
 
   --radius-small: 0.5rem;
   --radius-medium: 1rem;
+  --radius-large: 1.5rem;
 
   --content-width: 72rem;
+  --gutter: 1rem;
 
   --space-1: 0.5rem;
   --space-2: 0.75rem;
@@ -37,7 +69,27 @@
   --space-5: 2rem;
   --space-6: 3rem;
   --space-7: 4rem;
+
+  --font-body:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+
+  /* Three-column page grid: side gutters + centred content column.
+     Used by .site-main and .hero so the hero can run edge to edge
+     without any 100vw tricks (which cause sideways scrolling). */
+  --page-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [content-start] minmax(0, var(--content-width))
+    [content-end] minmax(var(--gutter), 1fr)
+    [full-end];
 }
+
+/* ---------- 2. Base ---------- */
 
 *,
 *::before,
@@ -45,22 +97,13 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   margin: 0;
+
   background: var(--colour-surface-soft);
   color: var(--colour-text);
-  font-family:
-    Inter,
-    ui-sans-serif,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
+
+  font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.65;
 }
@@ -87,37 +130,11 @@ select {
   font: inherit;
 }
 
-/* ---------- Typography ---------- */
-
-h1,
-h2,
-h3 {
+strong {
   color: var(--colour-ocean-950);
-  line-height: 1.2;
-  margin-top: 0;
 }
 
-h1 {
-  font-size: clamp(2rem, 6vw, 3.5rem);
-  margin-bottom: var(--space-4);
-}
-
-h2 {
-  font-size: clamp(1.5rem, 4vw, 2.1rem);
-  margin-bottom: var(--space-3);
-}
-
-h3 {
-  font-size: 1.25rem;
-  margin-bottom: var(--space-2);
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: var(--space-3);
-}
-
-/* ---------- Accessibility ---------- */
+/* ---------- 3. Accessibility helpers ---------- */
 
 .skip-link {
   position: absolute;
@@ -145,78 +162,40 @@ button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 3px solid var(--colour-coral-400);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
-/* ---------- Header ---------- */
-
-.site-header {
-  background:
-    linear-gradient(
-      135deg,
-      var(--colour-ocean-950),
-      var(--colour-ocean-800)
-    );
-
-  color: var(--colour-surface);
+/* On dark surfaces use the light ring instead */
+.site-header a:focus-visible,
+.site-footer a:focus-visible,
+.hero a:focus-visible,
+.deep-discovery a:focus-visible,
+.deep-discovery button:focus-visible,
+.conservation-banner a:focus-visible {
+  outline-color: var(--focus-ring-on-dark);
 }
 
-.site-header__inner {
-  width: min(100% - 2rem, var(--content-width));
-  margin-inline: auto;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-
-  min-height: 5rem;
+/* Cards that are made fully clickable also get a ring around the card */
+.zone-card:has(.card-link:focus-visible),
+.event-card:has(.card-link:focus-visible) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
 }
 
-.site-logo {
-  color: var(--colour-surface);
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  text-decoration: none;
-}
-
-.site-logo:hover {
-  color: var(--colour-aqua-300);
-}
-
-/* ---------- Navigation ---------- */
-
-.site-nav {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.site-nav a {
-  padding: 0.55rem 0.75rem;
-
-  color: var(--colour-surface);
-  border-radius: var(--radius-small);
-
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.site-nav a:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: var(--colour-aqua-300);
-}
-
-/* ---------- Main Layout ---------- */
+/* ---------- 4. Page layout (full-bleed grid) ---------- */
 
 .site-main {
-  width: min(100% - 2rem, var(--content-width));
-  margin-inline: auto;
+  display: grid;
+  grid-template-columns: var(--page-columns);
+  align-content: start;
+
   padding-block: var(--space-6);
+}
+
+.site-main > * {
+  grid-column: content;
+  min-width: 0;
 }
 
 .site-main > section,
@@ -228,17 +207,159 @@ section {
   scroll-margin-top: 2rem;
 }
 
-/* ---------- Generic Content ---------- */
-
 article {
   max-width: 100%;
 }
 
-strong {
+/* ---------- 5. Header, opening-hours bar and navigation ---------- */
+
+.site-header {
+  background: linear-gradient(
+    135deg,
+    var(--colour-ocean-950),
+    var(--colour-ocean-800)
+  );
+
+  color: var(--colour-surface);
+}
+
+/* Opening hours are shown at the very top of every page */
+.hours-bar {
+  background: var(--colour-coral-400);
   color: var(--colour-ocean-950);
 }
 
-/* ---------- Forms ---------- */
+.hours-bar__inner {
+  width: min(100% - 2 * var(--gutter), var(--content-width));
+  margin-inline: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  padding-block: 0.5rem;
+
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.hours-bar__inner p {
+  margin: 0;
+}
+
+.hours-bar__icon {
+  flex: none;
+}
+
+.site-header__inner {
+  width: min(100% - 2 * var(--gutter), var(--content-width));
+  margin-inline: auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+
+  min-height: 4.75rem;
+}
+
+.site-logo {
+  color: var(--colour-surface);
+
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+
+.site-logo:hover {
+  color: var(--colour-aqua-300);
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.site-nav a {
+  position: relative;
+
+  padding: 0.55rem 0.8rem;
+
+  color: var(--colour-surface);
+  border-radius: var(--radius-small);
+
+  font-weight: 600;
+  text-decoration: none;
+
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.site-nav a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--colour-aqua-300);
+}
+
+/* Current page indicator (aria-current is set in main.js).
+   The underline means it is not shown by colour alone. */
+.site-nav a[aria-current]::after {
+  content: "";
+
+  position: absolute;
+  right: 0.8rem;
+  bottom: 0.2rem;
+  left: 0.8rem;
+
+  height: 0.2rem;
+
+  border-radius: 999px;
+  background: var(--colour-aqua-300);
+}
+
+.site-nav a[aria-current="page"] {
+  color: var(--colour-aqua-300);
+}
+
+/* ---------- 6. Typography ---------- */
+
+h1,
+h2,
+h3 {
+  color: var(--colour-ocean-950);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: clamp(2.1rem, 6vw, 3.6rem);
+  font-weight: 800;
+  margin-bottom: var(--space-4);
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.15rem);
+  font-weight: 800;
+  margin-bottom: var(--space-3);
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: var(--space-3);
+}
+
+/* ---------- 7. Buttons and forms ---------- */
 
 form {
   max-width: 44rem;
@@ -257,12 +378,13 @@ label {
 }
 
 input,
-textarea {
+textarea,
+select {
   width: 100%;
 
   padding: 0.8rem 0.9rem;
 
-  border: 1px solid var(--colour-border);
+  border: 1px solid #8fb0bb;
   border-radius: var(--radius-small);
 
   background: var(--colour-surface);
@@ -275,28 +397,48 @@ textarea {
 }
 
 input:focus,
-textarea:focus {
-  border-color: var(--colour-ocean-700);
+textarea:focus,
+select:focus {
+  border-color: var(--colour-ocean-800);
 }
 
-button {
-  padding: 0.8rem 1.2rem;
+input[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: #b84538;
+  border-width: 2px;
+}
+
+button,
+.button-link {
+  display: inline-block;
+
+  padding: 0.85rem 1.4rem;
 
   border: 0;
-  border-radius: var(--radius-small);
+  border-radius: 999px;
 
   background: var(--colour-aqua-400);
   color: var(--colour-ocean-950);
 
   font-weight: 800;
+  text-decoration: none;
+
   cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-button:hover {
-  filter: brightness(0.95);
+button:hover,
+.button-link:hover {
+  background: var(--colour-aqua-300);
+  box-shadow: 0 6px 16px rgba(69, 214, 200, 0.35);
+  transform: translateY(-1px);
 }
 
-/* ---------- Shared Components ---------- */
+/* ---------- 8. Shared components ---------- */
 
 .eyebrow {
   margin-bottom: var(--space-2);
@@ -305,107 +447,12 @@ button:hover {
 
   font-size: 0.8rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .eyebrow--light {
   color: var(--colour-aqua-300);
-}
-
-.button-link {
-  display: inline-block;
-
-  padding: 0.8rem 1.2rem;
-
-  border-radius: var(--radius-small);
-
-  background: var(--colour-aqua-400);
-  color: var(--colour-ocean-950);
-
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.button-link:hover {
-  background: var(--colour-aqua-300);
-}
-
-.search-section {
-  margin: 3rem 0;
-}
-
-.search-box {
-  max-width: 48rem;
-}
-
-.search-box label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 700;
-}
-
-.search-box input[type="search"] {
-  width: 100%;
-  padding: 0.9rem 1rem;
-  border: 1px solid #b9d4dc;
-  border-radius: 0.75rem;
-  font: inherit;
-  background: #ffffff;
-  color: inherit;
-}
-
-.search-box input[type="search"]:focus {
-  outline: 3px solid rgba(34, 198, 194, 0.28);
-  outline-offset: 2px;
-  border-color: #22c6c2;
-}
-
-.search-status {
-  min-height: 1.5rem;
-  margin-top: 0.75rem;
-}
-
-.search-results {
-  display: grid;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-}
-
-.search-result {
-  border: 1px solid #c7dce3;
-  border-radius: 0.75rem;
-  background: #ffffff;
-  overflow: hidden;
-}
-
-.search-result__link {
-  display: block;
-  padding: 1rem;
-  color: inherit;
-  text-decoration: none;
-}
-
-.search-result__link:hover,
-.search-result__link:focus-visible {
-  background: #f1fbfb;
-}
-
-.search-result__type {
-  display: inline-block;
-  margin-bottom: 0.35rem;
-  font-size: 0.8rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.search-result__title {
-  margin: 0 0 0.35rem;
-}
-
-.search-result__description {
-  margin: 0;
 }
 
 .card-link {
@@ -433,48 +480,59 @@ button:hover {
   margin-bottom: 0;
 }
 
-/* ---------- Hero ---------- */
+.page-intro {
+  max-width: 48rem;
+  margin-bottom: var(--space-6);
+}
+
+.page-intro__text,
+.zone-hero__intro {
+  color: var(--colour-text-muted);
+  font-size: 1.15rem;
+}
+
+/* ---------- 9. Hero and opening times ---------- */
 
 .hero {
   position: relative;
   overflow: hidden;
 
-  min-height: 25rem;
-
-  display: flex;
+  display: grid;
+  grid-template-columns: var(--page-columns);
   align-items: center;
 
-  margin-top: calc(var(--space-6) * -1);
-  margin-inline: calc(
-    (100vw - min(100vw - 2rem, var(--content-width))) / -2
-  );
-  margin-bottom: var(--space-6);
+  min-height: 30rem;
 
-  padding: var(--space-7)
-    max(
-      1rem,
-      calc((100vw - var(--content-width)) / 2)
-    );
+  /* cancel the top padding of .site-main so the hero sits under the header */
+  margin-top: calc(var(--space-6) * -1);
+  margin-bottom: 0;
+  padding-block: var(--space-7) 7rem;
 
   background:
-  linear-gradient(
-    90deg,
-    rgba(4, 24, 38, 0.92) 0%,
-    rgba(4, 24, 38, 0.72) 42%,
-    rgba(4, 24, 38, 0.28) 72%,
-    rgba(4, 24, 38, 0.12) 100%
-  ),
-  url("/images/hero-aquarium.webp");
+    linear-gradient(
+      90deg,
+      rgba(4, 24, 38, 0.92) 0%,
+      rgba(4, 24, 38, 0.72) 42%,
+      rgba(4, 24, 38, 0.28) 72%,
+      rgba(4, 24, 38, 0.12) 100%
+    ),
+    url("/images/hero-aquarium.webp");
 
-background-size: cover;
-background-position: center;
-background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 
   color: var(--colour-surface);
 }
 
+.site-main > .hero {
+  grid-column: full;
+}
+
+/* Soft moving light, like sunlight through water */
 .hero::before {
   content: "";
+
   position: absolute;
   inset: -15%;
 
@@ -497,7 +555,23 @@ background-repeat: no-repeat;
   animation: water-light 12s ease-in-out infinite alternate;
 
   pointer-events: none;
-  z-index: 0;
+}
+
+/* Wave that blends the hero into the page background */
+.hero::after {
+  content: "";
+
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+
+  height: 4rem;
+
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath fill='%23f4fafb' d='M0 40c120 30 240 40 360 20s240-50 360-40 240 40 360 40 240-30 360-20v40H0z'/%3E%3C/svg%3E")
+    bottom / 100% 100% no-repeat;
+
+  pointer-events: none;
 }
 
 @keyframes water-light {
@@ -510,28 +584,11 @@ background-repeat: no-repeat;
   }
 }
 
-.hero::after {
-  content: "";
-  position: absolute;
-
-  width: 24rem;
-  height: 24rem;
-
-  right: -8rem;
-  bottom: -12rem;
-
-  border: 1px solid rgba(125, 228, 218, 0.28);
-  border-radius: 50%;
-
-  box-shadow:
-    0 0 0 4rem rgba(125, 228, 218, 0.04),
-    0 0 0 8rem rgba(125, 228, 218, 0.025);
-}
-
 .hero__content {
   position: relative;
   z-index: 1;
 
+  grid-column: content;
   max-width: 44rem;
 }
 
@@ -553,23 +610,27 @@ background-repeat: no-repeat;
   font-size: clamp(1.1rem, 2vw, 1.3rem);
 }
 
-/* ---------- Opening Times ---------- */
-
+/* Opening times card: overlaps the bottom of the hero so it cannot be missed */
 .opening-card {
+  position: relative;
+  z-index: 2;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-5);
 
+  margin-top: -3.5rem;
+
   padding: var(--space-4) var(--space-5);
 
   border: 1px solid var(--colour-border);
-  border-left: 0.4rem solid var(--colour-coral-400);
+  border-left: 0.5rem solid var(--colour-coral-400);
   border-radius: var(--radius-medium);
 
   background: var(--colour-surface);
 
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-lift);
 }
 
 .opening-card h2,
@@ -578,25 +639,136 @@ background-repeat: no-repeat;
 }
 
 .opening-card__time {
+  padding: 0.6rem 1.1rem;
+
+  border-radius: 999px;
+
+  background: var(--colour-aqua-100);
   color: var(--colour-ocean-950);
-  font-size: clamp(1.1rem, 3vw, 1.4rem);
+
+  font-size: clamp(1.15rem, 3vw, 1.5rem);
   text-align: right;
 }
 
-/* ---------- Page Introductions ---------- */
+/* ---------- 10. Site search ---------- */
 
-.page-intro {
-  max-width: 48rem;
-  margin-bottom: var(--space-6);
+.search-section {
+  padding: var(--space-5);
+
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-large);
+
+  background: var(--colour-surface);
+
+  box-shadow: var(--shadow-soft);
 }
 
-.page-intro__text,
-.zone-hero__intro {
+.search-section .section-heading {
+  margin-bottom: var(--space-4);
+}
+
+.search-box {
+  max-width: 100%;
+}
+
+.search-box label {
+  margin-bottom: 0.5rem;
+}
+
+.search-box input[type="search"] {
+  padding: 0.95rem 1.1rem;
+
+  border: 2px solid #8fb0bb;
+  border-radius: 999px;
+
+  font-size: 1.05rem;
+}
+
+.search-box input[type="search"]:focus {
+  border-color: var(--colour-ocean-800);
+}
+
+.search-status {
+  min-height: 1.5rem;
+  margin-top: 0.75rem;
+
   color: var(--colour-text-muted);
-  font-size: 1.15rem;
+  font-weight: 700;
 }
 
-/* ---------- Zone Cards ---------- */
+.search-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: 0.75rem;
+
+  margin-top: 0.75rem;
+}
+
+.search-results:empty {
+  margin-top: 0;
+}
+
+.search-result {
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-medium);
+
+  background: var(--colour-surface-soft);
+  overflow: hidden;
+
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.search-result:hover {
+  box-shadow: var(--shadow-soft);
+  transform: translateY(-2px);
+}
+
+.search-result__link {
+  display: block;
+  height: 100%;
+
+  padding: 1rem;
+
+  color: inherit;
+  text-decoration: none;
+}
+
+.search-result__link:hover,
+.search-result__link:focus-visible {
+  background: var(--colour-aqua-100);
+}
+
+.search-result__type {
+  display: inline-block;
+
+  margin-bottom: 0.5rem;
+  padding: 0.2rem 0.6rem;
+
+  border-radius: 999px;
+
+  background: var(--colour-ocean-800);
+  color: var(--colour-surface);
+
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.search-result__title {
+  margin: 0 0 0.35rem;
+
+  font-size: 1.1rem;
+}
+
+.search-result__description {
+  margin: 0;
+
+  color: var(--colour-text-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- 11. Zone cards ---------- */
 
 .card-grid {
   display: grid;
@@ -609,8 +781,6 @@ background-repeat: no-repeat;
 .zone-card {
   position: relative;
 
-  min-height: 15rem;
-
   display: flex;
   flex-direction: column;
 
@@ -619,49 +789,42 @@ background-repeat: no-repeat;
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-medium);
 
-  background:
-    linear-gradient(
-      180deg,
-      rgba(69, 214, 200, 0.08),
-      transparent 55%
-    ),
-    var(--colour-surface);
+  background: var(--colour-surface);
 
   box-shadow: var(--shadow-soft);
 
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
-.zone-card::before {
-  content: "";
-
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-
-  height: 0.3rem;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--colour-aqua-400),
-      var(--colour-ocean-700)
-    );
+.zone-card:hover {
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-4px);
 }
 
 .zone-card__image {
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+
+  transition: transform 0.4s ease;
+}
+
+/* zoom stays inside the card because .zone-card has overflow: hidden */
+.zone-card:hover .zone-card__image {
+  transform: scale(1.04);
 }
 
 .zone-card__content {
-  width: 100%;
+  flex: 1;
 
   display: flex;
   flex-direction: column;
 
+  width: 100%;
   padding: var(--space-4);
+
+  border-top: 0.3rem solid var(--colour-aqua-400);
+  background: var(--colour-surface);
 }
 
 .zone-card h3 {
@@ -672,18 +835,32 @@ background-repeat: no-repeat;
   color: var(--colour-text-muted);
 }
 
-/* ---------- Conservation Banner ---------- */
+/* One link, but the whole card is clickable */
+.zone-card .card-link::after,
+.event-card .card-link::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- 12. Conservation banner ---------- */
 
 .conservation-banner {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
   gap: var(--space-5);
 
-  padding: var(--space-5);
+  padding: var(--space-6) var(--space-5);
 
-  border-radius: var(--radius-medium);
+  border-radius: var(--radius-large);
 
   background:
+    radial-gradient(
+      circle at 90% 10%,
+      rgba(125, 228, 218, 0.22),
+      transparent 22rem
+    ),
     linear-gradient(
       135deg,
       var(--colour-ocean-900),
@@ -703,9 +880,11 @@ background-repeat: no-repeat;
   margin-bottom: 0;
 
   color: #e8f7f8;
+
+  font-size: 1.1rem;
 }
 
-/* ---------- Zone Detail ---------- */
+/* ---------- 13. Zone detail and exhibits ---------- */
 
 .zone-detail {
   max-width: none;
@@ -727,9 +906,9 @@ background-repeat: no-repeat;
 
   margin-top: var(--space-4);
 
-  border-radius: var(--radius-medium);
+  border-radius: var(--radius-large);
 
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-lift);
 }
 
 .zone-information {
@@ -742,9 +921,10 @@ background-repeat: no-repeat;
 }
 
 .info-panel {
-  padding: var(--space-4);
+  padding: var(--space-5);
 
   border: 1px solid var(--colour-border);
+  border-top: 0.3rem solid var(--colour-ocean-700);
   border-radius: var(--radius-medium);
 
   background: var(--colour-surface);
@@ -757,18 +937,16 @@ background-repeat: no-repeat;
 }
 
 .info-panel--conservation {
-  border-top: 0.3rem solid var(--colour-aqua-400);
+  border-top-color: var(--colour-aqua-400);
 
   background:
     linear-gradient(
       180deg,
-      rgba(69, 214, 200, 0.08),
-      transparent 50%
+      rgba(69, 214, 200, 0.12),
+      transparent 55%
     ),
     var(--colour-surface);
 }
-
-/* ---------- Exhibits ---------- */
 
 .exhibit-grid {
   display: grid;
@@ -782,20 +960,31 @@ background-repeat: no-repeat;
   padding: var(--space-4);
 
   border: 1px solid var(--colour-border);
+  border-left: 0.35rem solid var(--colour-aqua-400);
   border-radius: var(--radius-medium);
 
   background: var(--colour-surface);
+
+  box-shadow: var(--shadow-soft);
+
+  scroll-margin-top: 2rem;
+}
+
+/* Exhibit reached from a search result */
+.exhibit-card:target {
+  border-left-color: var(--colour-coral-400);
+  box-shadow: var(--shadow-lift);
 }
 
 .exhibit-card__type {
   display: inline-block;
 
   margin-bottom: var(--space-3);
-  padding: 0.3rem 0.65rem;
+  padding: 0.3rem 0.75rem;
 
   border-radius: 999px;
 
-  background: #e1f7f5;
+  background: var(--colour-aqua-100);
   color: var(--colour-ocean-800);
 
   font-size: 0.8rem;
@@ -820,20 +1009,25 @@ background-repeat: no-repeat;
   font-weight: 800;
 }
 
-/* ---------- FAQ ---------- */
+/* ---------- 14. FAQ ---------- */
 
 .faq-list {
+  display: grid;
+  gap: var(--space-3);
+
   max-width: 52rem;
 }
 
 .faq-item {
-  padding-block: var(--space-4);
+  padding: var(--space-4) var(--space-5);
 
-  border-top: 1px solid var(--colour-border);
-}
+  border: 1px solid var(--colour-border);
+  border-left: 0.35rem solid var(--colour-aqua-400);
+  border-radius: var(--radius-medium);
 
-.faq-item:last-child {
-  border-bottom: 1px solid var(--colour-border);
+  background: var(--colour-surface);
+
+  box-shadow: var(--shadow-soft);
 }
 
 .faq-item h2 {
@@ -849,61 +1043,7 @@ background-repeat: no-repeat;
   color: var(--colour-text-muted);
 }
 
-
-/* ---------- Placeholder Panels ---------- */
-
-.placeholder-panel {
-  max-width: 48rem;
-
-  padding: var(--space-5);
-
-  border: 1px solid var(--colour-border);
-  border-radius: var(--radius-medium);
-
-  background:
-    linear-gradient(
-      135deg,
-      rgba(69, 214, 200, 0.08),
-      transparent 65%
-    ),
-    var(--colour-surface);
-
-  box-shadow: var(--shadow-soft);
-}
-
-.placeholder-panel > :last-child {
-  margin-bottom: 0;
-}
-
-
-/* ---------- 404 ---------- */
-
-.error-page {
-  max-width: 42rem;
-
-  padding-block: var(--space-5);
-}
-
-.error-page__code {
-  margin-bottom: var(--space-2);
-
-  color: var(--colour-aqua-400);
-
-  font-size: clamp(4rem, 12vw, 7rem);
-  font-weight: 900;
-  line-height: 1;
-}
-
-.error-page > p:not(.error-page__code):not(.eyebrow) {
-  max-width: 36rem;
-  margin-bottom: var(--space-4);
-
-  color: var(--colour-text-muted);
-
-  font-size: 1.1rem;
-}
-
-/* ---------- Contact ---------- */
+/* ---------- 15. Contact ---------- */
 
 .contact-layout {
   display: grid;
@@ -936,7 +1076,7 @@ background-repeat: no-repeat;
   background:
     linear-gradient(
       180deg,
-      rgba(69, 214, 200, 0.08),
+      rgba(69, 214, 200, 0.12),
       transparent 55%
     ),
     var(--colour-surface);
@@ -996,16 +1136,165 @@ background-repeat: no-repeat;
   color: inherit;
 }
 
-/* ---------- Activity ---------- */
+/* ---------- 16. Events ---------- */
+
+.events-section {
+  max-width: var(--content-width);
+}
+
+.events-filter-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 16rem));
+  gap: var(--space-4);
+
+  max-width: none;
+  margin-bottom: var(--space-3);
+  padding: var(--space-4);
+
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-medium);
+
+  background: var(--colour-surface);
+
+  box-shadow: var(--shadow-soft);
+}
+
+.events-filter-form > div {
+  margin-bottom: 0;
+}
+
+.events-status {
+  min-height: 1.75rem;
+  margin-bottom: var(--space-4);
+
+  color: var(--colour-text-muted);
+  font-weight: 700;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: var(--space-4);
+}
+
+.event-card {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid var(--colour-border);
+  border-radius: var(--radius-medium);
+
+  background: var(--colour-surface);
+  box-shadow: var(--shadow-soft);
+
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.event-card:hover {
+  box-shadow: var(--shadow-lift);
+  transform: translateY(-4px);
+}
+
+.event-card__image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.event-card__content {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: var(--space-4);
+}
+
+.event-card__content h3 a {
+  color: var(--colour-ocean-950);
+  text-decoration: none;
+}
+
+.event-card__category {
+  margin-bottom: var(--space-1);
+
+  color: var(--colour-ocean-700);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.event-card__date,
+.event-detail__date {
+  color: var(--colour-text-muted);
+  font-weight: 700;
+}
+
+.event-card__content > :last-child {
+  margin-bottom: 0;
+}
+
+.event-detail {
+  max-width: 64rem;
+}
+
+.event-detail__status {
+  display: inline-block;
+
+  padding: 0.45rem 0.9rem;
+  margin-bottom: var(--space-4);
+
+  border-radius: 999px;
+
+  background: var(--colour-aqua-100);
+  color: var(--colour-ocean-950);
+
+  font-weight: 800;
+}
+
+/* Past events: different colour AND different wording, never colour alone */
+.event-detail__status--past {
+  border: 2px solid var(--colour-ocean-700);
+
+  background: var(--colour-surface);
+  color: var(--colour-ocean-800);
+}
+
+.event-detail__image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+
+  margin-bottom: var(--space-4);
+
+  border-radius: var(--radius-large);
+
+  box-shadow: var(--shadow-lift);
+}
+
+.event-detail__description {
+  max-width: 46rem;
+
+  font-size: 1.1rem;
+}
+
+/* ---------- 17. Activity ---------- */
 
 .activity-intro {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
 
   gap: var(--space-5);
+  align-items: center;
 
   margin-bottom: var(--space-5);
-  padding: var(--space-4);
+  padding: var(--space-5);
 
   border: 1px solid var(--colour-border);
   border-radius: var(--radius-medium);
@@ -1021,9 +1310,15 @@ background-repeat: no-repeat;
 }
 
 .deep-discovery {
+  /* one column on phones; scene + creature panel side by side from 45rem */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+
   padding: var(--space-5);
 
-  border-radius: var(--radius-medium);
+  border-radius: var(--radius-large);
 
   background:
     radial-gradient(
@@ -1039,7 +1334,7 @@ background-repeat: no-repeat;
 
   color: var(--colour-surface);
 
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-lift);
 }
 
 .deep-discovery h2,
@@ -1053,8 +1348,6 @@ background-repeat: no-repeat;
   justify-content: space-between;
 
   gap: var(--space-4);
-
-  margin-bottom: var(--space-4);
 }
 
 .activity-status h2 {
@@ -1063,6 +1356,10 @@ background-repeat: no-repeat;
 
 .activity-progress {
   margin-bottom: 0;
+  padding: 0.4rem 0.9rem;
+
+  border: 1px solid rgba(125, 228, 218, 0.4);
+  border-radius: 999px;
 
   color: var(--colour-aqua-300);
 
@@ -1073,7 +1370,9 @@ background-repeat: no-repeat;
 .deep-scene {
   position: relative;
 
-  min-height: 30rem;
+  /* height follows the screen height so the scene never fills the whole
+     viewport and the creature panel stays in view */
+  height: clamp(13rem, 42vh, 30rem);
 
   overflow: hidden;
 
@@ -1101,6 +1400,8 @@ background-repeat: no-repeat;
 
   border: 1px solid rgba(125, 228, 218, 0.12);
   border-radius: 50%;
+
+  pointer-events: none;
 }
 
 .deep-scene::before {
@@ -1153,10 +1454,16 @@ background-repeat: no-repeat;
 .creature-spot:hover,
 .creature-spot:focus-visible {
   transform: scale(1.08);
+
   background: var(--colour-ocean-800);
+  box-shadow:
+    0 0 0 0.35rem rgba(69, 214, 200, 0.25),
+    0 0 2.2rem rgba(69, 214, 200, 0.6);
 }
 
-.creature-spot--discovered {
+.creature-spot--discovered,
+.creature-spot--discovered:hover,
+.creature-spot--discovered:focus-visible {
   border-color: var(--colour-coral-400);
 
   background: var(--colour-coral-400);
@@ -1189,9 +1496,8 @@ background-repeat: no-repeat;
 }
 
 .activity-feedback {
-  min-height: 9rem;
+  min-height: 6rem;
 
-  margin-top: var(--space-4);
   padding: var(--space-4);
 
   border: 1px solid rgba(125, 228, 218, 0.25);
@@ -1202,14 +1508,18 @@ background-repeat: no-repeat;
 
 .activity-feedback__content {
   display: grid;
-  grid-template-columns: minmax(12rem, 0.7fr) minmax(0, 1.3fr);
-  gap: var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
 
-  align-items: center;
+  align-items: start;
 }
 
+/* Keeps the photo's 4:3 shape (no cropping) but limits its height
+   to the screen height so the text below stays visible */
 .activity-feedback__image {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  height: clamp(6.5rem, 20vh, 11rem);
   aspect-ratio: 4 / 3;
 
   object-fit: cover;
@@ -1244,13 +1554,12 @@ background-repeat: no-repeat;
 }
 
 .activity-complete {
-  margin-top: var(--space-4);
   padding: var(--space-4);
 
   border-left: 0.35rem solid var(--colour-coral-400);
   border-radius: var(--radius-small);
 
-  background: rgba(255, 128, 108, 0.12);
+  background: rgba(255, 128, 108, 0.14);
 }
 
 .activity-complete .eyebrow {
@@ -1261,7 +1570,119 @@ background-repeat: no-repeat;
   margin-bottom: 0;
 }
 
-/* ---------- Footer ---------- */
+/* Tablet, laptop and desktop: scene on the left, creature panel on the
+   right, so a revealed creature is visible without scrolling */
+@media (min-width: 45rem) {
+  .deep-discovery {
+    grid-template-columns: minmax(0, 1.6fr) minmax(15rem, 1fr);
+    grid-template-areas:
+      "status status"
+      "scene feedback"
+      "complete complete";
+  }
+
+  .activity-status {
+    grid-area: status;
+  }
+
+  .deep-scene {
+    grid-area: scene;
+
+    height: clamp(14rem, 62vh, 32rem);
+  }
+
+  .activity-feedback {
+    grid-area: feedback;
+
+    align-self: stretch;
+  }
+
+  .activity-feedback__image {
+    height: clamp(7rem, 24vh, 13rem);
+  }
+
+  .activity-complete {
+    grid-area: complete;
+  }
+}
+
+/* Phones and short (landscape) screens: compact creature panel.
+   Small photo beside the name, fact underneath, so the whole panel
+   fits on screen together with the scene. */
+@media (max-width: 44.99rem) {
+  .deep-discovery {
+    gap: var(--space-3);
+  }
+}
+
+@media (max-width: 44.99rem), (max-height: 32rem) {
+  .activity-feedback {
+    min-height: 4.5rem;
+
+    padding: var(--space-3);
+  }
+
+  .activity-feedback__content {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.5rem var(--space-3);
+
+    align-items: center;
+  }
+
+  .activity-feedback__information {
+    display: contents;
+  }
+
+  .activity-feedback__image {
+    grid-column: 1;
+    grid-row: 1;
+
+    width: auto;
+    height: 4.5rem;
+  }
+
+  .activity-feedback__content h3 {
+    grid-column: 2;
+    grid-row: 1;
+
+    margin: 0;
+  }
+
+  .activity-feedback__content p {
+    grid-column: 1 / -1;
+
+    margin: 0;
+  }
+}
+
+/* ---------- 18. 404 page ---------- */
+
+.error-page {
+  max-width: 42rem;
+
+  padding-block: var(--space-5);
+}
+
+.error-page__code {
+  margin-bottom: var(--space-2);
+
+  color: var(--colour-ocean-700);
+
+  font-size: clamp(4rem, 12vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+.error-page > p:not(.error-page__code):not(.eyebrow) {
+  max-width: 36rem;
+  margin-bottom: var(--space-4);
+
+  color: var(--colour-text-muted);
+
+  font-size: 1.1rem;
+}
+
+/* ---------- 19. Footer ---------- */
 
 .site-footer {
   margin-top: var(--space-6);
@@ -1271,21 +1692,73 @@ background-repeat: no-repeat;
 }
 
 .site-footer__inner {
-  width: min(100% - 2rem, var(--content-width));
+  width: min(100% - 2 * var(--gutter), var(--content-width));
   margin-inline: auto;
 
-  padding-block: var(--space-5);
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: var(--space-5);
+
+  padding-block: var(--space-6);
 }
 
 .site-footer p {
   margin-bottom: var(--space-1);
 }
 
-.site-footer strong {
+.site-footer__title {
+  color: var(--colour-aqua-300);
+
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.site-footer__heading {
+  margin-bottom: var(--space-2);
+
+  color: var(--colour-aqua-300);
+
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.site-footer__hours {
+  color: var(--colour-surface);
+
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.site-footer ul {
+  display: grid;
+  gap: 0.35rem;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.site-footer a {
+  color: var(--colour-surface);
+}
+
+.site-footer a:hover {
   color: var(--colour-aqua-300);
 }
 
-/* ---------- Responsive ---------- */
+/* ---------- 20. Responsive rules ---------- */
+
+@media (max-width: 64rem) {
+  .site-footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+}
 
 @media (max-width: 48rem) {
   .site-header__inner {
@@ -1304,10 +1777,20 @@ background-repeat: no-repeat;
     padding-block: var(--space-5);
   }
 
-    .opening-card {
+  .hero {
+    min-height: 26rem;
+
+    margin-top: calc(var(--space-5) * -1);
+    padding-block: var(--space-6) 6rem;
+  }
+
+  .opening-card {
     align-items: flex-start;
     flex-direction: column;
     gap: var(--space-2);
+
+    margin-top: -3rem;
+    padding: var(--space-4);
   }
 
   .opening-card__time {
@@ -1315,19 +1798,16 @@ background-repeat: no-repeat;
   }
 
   .zone-information,
-  .conservation-banner {
-    grid-template-columns: 1fr;
-  }
-
-  .hero {
-    min-height: 22rem;
-  }
-
+  .conservation-banner,
   .contact-layout {
     grid-template-columns: 1fr;
   }
 
-    .activity-intro {
+  .conservation-banner {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .activity-intro {
     grid-template-columns: 1fr;
     gap: var(--space-2);
   }
@@ -1335,23 +1815,35 @@ background-repeat: no-repeat;
   .activity-status {
     align-items: flex-start;
     flex-direction: column;
+    gap: 0.5rem;
   }
 
   .activity-progress {
     text-align: left;
   }
 
-  .deep-scene {
-    min-height: 27rem;
+  .search-section {
+    padding: var(--space-4);
   }
-
-  .activity-feedback__content {
-  grid-template-columns: 1fr;
-}
 }
 
 @media (max-width: 30rem) {
-    .site-nav {
+  :root {
+    --gutter: 0.75rem;
+  }
+
+  .hours-bar__inner {
+    font-size: 0.85rem;
+  }
+
+  /* keep "9am–6pm" on one line on small phones */
+  .opening-card__time {
+    padding: 0.5rem 0.9rem;
+
+    font-size: 1.05rem;
+  }
+
+  .site-nav {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0.35rem;
@@ -1365,21 +1857,66 @@ background-repeat: no-repeat;
     text-align: center;
   }
 
-  .site-main {
-    width: min(100% - 1.25rem, var(--content-width));
+  .site-nav a[aria-current]::after {
+    right: 25%;
+    left: 25%;
   }
 
-    .deep-discovery {
+  .events-filter-form {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-panel {
+    padding: var(--space-4);
+  }
+
+  .deep-discovery {
     padding: var(--space-3);
-  }
-
-  .deep-scene {
-    min-height: 25rem;
   }
 
   .creature-spot {
     width: 3rem;
     height: 3rem;
+  }
+
+  .site-footer__inner {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Hero legibility on narrow screens: the text runs across the whole image,
+   so the darkening layer covers the full width instead of fading out
+   to the right (measured: text contrast stays above 4.5:1). */
+@media (max-width: 56rem) {
+  .hero {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(4, 24, 38, 0.86) 0%,
+        rgba(4, 24, 38, 0.78) 100%
+      ),
+      url("/images/hero-aquarium.webp") center / cover no-repeat;
+  }
+}
+
+/* Very small phones (320px wide) */
+@media (max-width: 22.5rem) {
+  .opening-card {
+    padding: var(--space-3);
+  }
+
+  .opening-card__time {
+    padding: 0.5rem 0.7rem;
+
+    font-size: 0.98rem;
+  }
+}
+
+/* ---------- 21. Reduced motion ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
   }
 }
 
@@ -1388,129 +1925,24 @@ background-repeat: no-repeat;
     animation: none;
   }
 
-  .creature-spot {
+  .zone-card,
+  .zone-card__image,
+  .event-card,
+  .search-result,
+  .creature-spot,
+  button,
+  .button-link {
     transition: none;
   }
 
+  .zone-card:hover,
+  .event-card:hover,
+  .search-result:hover,
+  button:hover,
+  .button-link:hover,
+  .zone-card:hover .zone-card__image,
   .creature-spot:hover,
   .creature-spot:focus-visible {
     transform: none;
-  }
-}
-
-/* ---------- Events ---------- */
-
-.events-section {
-  max-width: var(--content-width);
-}
-
-.events-filter-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 16rem));
-  gap: var(--space-4);
-
-  max-width: none;
-  margin-bottom: var(--space-3);
-}
-
-.events-filter-form > div {
-  margin-bottom: 0;
-}
-
-.events-filter-form select {
-  width: 100%;
-  padding: 0.8rem 0.9rem;
-
-  border: 1px solid var(--colour-border);
-  border-radius: var(--radius-small);
-
-  background: var(--colour-surface);
-  color: var(--colour-text);
-}
-
-.events-status {
-  min-height: 1.75rem;
-  margin-bottom: var(--space-4);
-
-  color: var(--colour-text-muted);
-  font-weight: 700;
-}
-
-.event-grid {
-  display: grid;
-  grid-template-columns:
-    repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
-  gap: var(--space-4);
-}
-
-.event-card {
-  overflow: hidden;
-
-  border: 1px solid var(--colour-border);
-  border-radius: var(--radius-medium);
-
-  background: var(--colour-surface);
-  box-shadow: var(--shadow-soft);
-}
-
-.event-card__image {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-}
-
-.event-card__content {
-  padding: var(--space-4);
-}
-
-.event-card__category {
-  margin-bottom: var(--space-1);
-
-  color: var(--colour-ocean-700);
-  font-size: 0.85rem;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-
-.event-card__date,
-.event-detail__date {
-  color: var(--colour-text-muted);
-  font-weight: 700;
-}
-
-.event-card__content > :last-child {
-  margin-bottom: 0;
-}
-
-.event-detail {
-  max-width: 64rem;
-}
-
-.event-detail__status {
-  display: inline-block;
-
-  padding: 0.45rem 0.75rem;
-  margin-bottom: var(--space-4);
-
-  border-radius: var(--radius-small);
-
-  background: #e4f6f3;
-  color: var(--colour-ocean-950);
-
-  font-weight: 800;
-}
-
-.event-detail__image {
-  margin-bottom: var(--space-4);
-  border-radius: var(--radius-medium);
-}
-
-.event-detail__description {
-  font-size: 1.1rem;
-}
-
-@media (max-width: 30rem) {
-  .events-filter-form {
-    grid-template-columns: 1fr;
   }
 }
