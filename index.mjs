@@ -54,6 +54,12 @@ app.get("/faq", (req, res) => {
   });
 });
 
+app.get("/privacy", (req, res) => {
+  res.render("privacy", {
+    pageTitle: "Privacy & Data Protection"
+  });
+});
+
 app.use((req, res) => {
   res.status(404).render("404", {
     pageTitle: "Page not found"
